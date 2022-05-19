@@ -54,6 +54,7 @@ def rebase_ghstack_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False) -> N
             gh_post_comment(pr.org, pr.project, pr.pr_num,
                             f"Tried to rebase and push PR #{pr.pr_num}, but it was already up to date", dry_run=dry_run)
         else:
+            print(push_result)
             gh_post_comment(pr.org, pr.project, pr.pr_num,
                             f"Successfully rebased `{orig_ref}` onto `{onto_branch}`, please pull locally " +
                             f"before adding more changes (for example, via `git checkout {orig_ref} && " +
