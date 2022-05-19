@@ -49,7 +49,7 @@ def rebase_ghstack_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False) -> N
     if dry_run:
         print("Don't know how to dry-run ghstack")
     else:
-        push_result = subprocess.run(["ghstack"])
+        push_result = subprocess.run(["ghstack"]).stdout.decode("utf-8")
         if "Everything up-to-date" in push_result:
             gh_post_comment(pr.org, pr.project, pr.pr_num,
                             f"Tried to rebase and push PR #{pr.pr_num}, but it was already up to date", dry_run=dry_run)
