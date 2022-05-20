@@ -54,7 +54,7 @@ def rebase_ghstack_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False) -> N
         push_result = ghstack_result.stdout.decode("utf-8")
         print(push_result)
         if 1 != 0:
-            raise Exception(f"`{push_result}`")
+            raise Exception(f"\n```{push_result}```")
         # The contents of a successful push result should look like:
         # Summary of changes (ghstack 0.6.0)
 
