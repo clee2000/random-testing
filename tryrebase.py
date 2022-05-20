@@ -40,7 +40,8 @@ def rebase_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False) -> None:
 
 
 def rebase_ghstack_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False) -> None:
-    subprocess.run([sys.executable, "-m", "pip", "install", "ghstack"])
+    if subprocess.run([sys.executable, "-m", "ghstack", "--help"], capture_output=True).returncode != 0:
+        subprocess.run([sys.executable, "-m", "pip", "install", "ghstack"])
     orig_ref = f"{re.sub(r'/head$', '/orig', pr.head_ref())}"
     onto_branch = pr.default_branch()
 
@@ -57,7 +58,7 @@ def rebase_ghstack_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False) -> N
                 pr_num = int(line.split("/")[-1])
                 if pr_num != pr.pr_num:
                     gh_post_comment(pr.org, pr.project, pr_num,
-                                    f"Rebased `{orig_ref}` onto `{onto_branch}`, because #{pr.pr_num} was rebased, please pull locally " +
+                                    f"Rebased `{orig_ref}` onto `{onto_branch}` because #{pr.pr_num} was rebased, please pull locally " +
                                     f"before adding more changes (for example, via `git checkout {orig_ref} && " +
                                     "git pull --rebase`)", dry_run=dry_run)
                 else:
