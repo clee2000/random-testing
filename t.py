@@ -2,6 +2,6 @@ import subprocess
 import sys
 print(sys.executable)
 
-if subprocess.run([sys.executable, "-m", "ghstack", "--help"], capture_output=True).returncode != 0:
-    subprocess.run([sys.executable, "-m", "pip", "install", "ghstack"])
+push_result = subprocess.run(["ghstack"], capture_output=True).returncode
+print(push_result)
 print(";aldksfj")
