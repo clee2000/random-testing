@@ -46,7 +46,10 @@ def rebase_ghstack_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False) -> N
     onto_branch = pr.default_branch()
 
     repo.fetch(orig_ref, orig_ref)
-    repo._run_git("rebase", "--onto", "stable", f"$(git merge-base master ${orig_ref}", orig_ref)
+    merge_base = repo._run_git("merge-base", "master", orig_ref)
+    print(merge_base)
+
+    repo._run_git("rebase", "--onto", "master", merge_base.strip(), orig_ref)
     if dry_run:
         print("Don't know how to dry-run ghstack")
     else:
@@ -110,6 +113,7 @@ def main() -> None:
         run_url = os.getenv("GH_RUN_URL")
         if run_url is not None:
             msg += f"\nRaised by {run_url}"
+        print(e)
         gh_post_comment(org, project, args.pr_num, msg, dry_run=args.dry_run)
 
 
