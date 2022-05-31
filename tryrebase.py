@@ -19,13 +19,6 @@ def parse_args() -> Any:
 
 
 def rebase_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False, stable: bool = False) -> None:
-    os.environ["OAUTH_TOKEN"] = os.environ["GITHUB_TOKEN"]
-    with open('~/.ghstackrc', 'w') as f:
-        f.write('[ghstack]\n' +
-                "github_url=github.com\n" +
-                "github_username=pytorchmergebot\n" +
-                "remote_name=origin")
-
     branch = f"pull/{pr.pr_num}/head"
     onto_branch = "refs/remotes/origin/viable/strict" if stable else pr.default_branch()
     remote_url = f"https://github.com/{pr.info['headRepository']['nameWithOwner']}.git"
@@ -48,6 +41,13 @@ def rebase_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False, stable: bool
 
 
 def rebase_ghstack_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False, stable: bool = False) -> None:
+    os.environ["OAUTH_TOKEN"] = os.environ["GITHUB_TOKEN"]
+    with open('~/.ghstackrc', 'w') as f:
+        f.write('[ghstack]\n' +
+                "github_url=github.com\n" +
+                "github_username=clee2000\n" +
+                "remote_name=origin")
+
     if subprocess.run([sys.executable, "-m", "ghstack", "--help"], capture_output=True).returncode != 0:
         subprocess.run([sys.executable, "-m", "pip", "install", "ghstack"])
     orig_ref = f"{re.sub(r'/head$', '/orig', pr.head_ref())}"
