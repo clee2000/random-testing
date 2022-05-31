@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+    <testsuite name="pytest" errors="0" failures="0" skipped="2" tests="8" time="0.191" timestamp="2022-05-25T14:30:10.784513" hostname="csl-mbp">
+        <testcase classname="t" name="test1" time="0.001" />
+        <testcase classname="t" name="test2" time="0.000" />
+        <testcase classname="t" name="test3" time="0.000" />
+        <testcase classname="t" name="test4" time="0.000" />
+        <testcase classname="t.TestCalculatorClass" name="test_distance" time="0.001" />
+        <testcase classname="t.TestCalculatorClass" name="test_sum_of_square" time="0.000">
+            <skipped type="pytest.skip" message="no way of currently testing this">/Users/csl/zzzzzzzz/random-testing/t.py:35: no way of currently testing this</skipped>
+        </testcase>
+        <testcase classname="t.Testing" name="test_unittest_1" time="0.002" />
+        <testcase classname="t.Testing" name="test_unittest_2" time="0.000">
+            <skipped type="pytest.skip" message="al;sdkfj">/Users/csl/zzzzzzzz/random-testing/t.py:47: al;sdkfj</skipped>
+        </testcase>
+    </testsuite>
+</testsuites>
