@@ -2,8 +2,6 @@ name: Rebase PR
 
 on:
   repository_dispatch:
-  issue_comment:
-    types: [created, deleted]
 
 jobs:
   do_rebase:
