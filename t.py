@@ -1,4 +1,6 @@
+import unittest
 import random
+import expecttest
 import pytest
 
 
@@ -31,6 +33,31 @@ class TestCalculatorClass:
         print("Test distance function")
         assert True
 
+    @pytest.mark.skipif(2 == 2, reason="no way of currently testing this")
     def test_sum_of_square(self):
         print("Test sum of square function")
         assert random.randint(1, 2) == 2
+
+
+class TestCase(expecttest.TestCase):
+    def run(self, result=None):
+        print("hello")
+        super().run(result=result)
+        print(result)
+
+
+class Testing(TestCase):
+    def test_unittest_1(self):
+        a = random.randint(1, 3)
+        b = random.randint(1, 3)
+        self.assertEqual(a, b)
+
+    # @unittest.skip("al;sdkfj")
+    def test_unittest_2(self):
+        a = True
+        b = True
+        self.assertEqual(a, b)
+
+
+if __name__ == '__main__':
+    unittest.main()
