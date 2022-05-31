@@ -8,7 +8,7 @@ from datetime import datetime
 from typing import cast, Any, Dict, Iterator, List, Optional, Tuple, Union
 
 
-RE_GITHUB_URL_MATCH = re.compile("^https://.*@?github.com/(.+)/(.+).git$")
+RE_GITHUB_URL_MATCH = re.compile("^https://.*@?github.com/(.+)/(.+)$")
 
 
 def get_git_remote_name() -> str:

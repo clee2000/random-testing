@@ -2,10 +2,12 @@ name: Rebase PR
 
 on:
   repository_dispatch:
-    types: [try-rebase]
+  issue_comment:
+    types: [created]
 
 jobs:
   do_rebase:
+    if: contains(github.event.comment.body, '/rebase')
     runs-on: ubuntu-20.04
     steps:
       - name: Setup Python
@@ -31,4 +33,4 @@ jobs:
           PR_NUM: ${{ github.event.client_payload.pr_num }}
           GH_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          python3 tryrebase.py "${PR_NUM}"
+          python3 tryrebase.py 14
