@@ -1,25 +1,33 @@
 #!/usr/bin/env python3
 
 import os
+import subprocess
+import sys
+import re
 from typing import Any
 from gitutils import get_git_remote_name, get_git_repo_dir, GitRepo
 from trymerge import gh_post_comment, GitHubPR
-import re
-import subprocess
-import sys
 
 
 def parse_args() -> Any:
     from argparse import ArgumentParser
     parser = ArgumentParser("Rebase PR into branch")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--stable", action="store_true")
     parser.add_argument("pr_num", type=int)
     return parser.parse_args()
 
 
-def rebase_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False) -> None:
+def rebase_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False, stable: bool = False) -> None:
+    os.environ["OAUTH_TOKEN"] = os.environ["GITHUB_TOKEN"]
+    with open('~/.ghstackrc', 'w') as f:
+        f.write('[ghstack]\n' +
+                "github_url=github.com\n" +
+                "github_username=pytorchmergebot\n" +
+                "remote_name=origin")
+
     branch = f"pull/{pr.pr_num}/head"
-    onto_branch = pr.default_branch()
+    onto_branch = "refs/remotes/origin/viable/strict" if stable else pr.default_branch()
     remote_url = f"https://github.com/{pr.info['headRepository']['nameWithOwner']}.git"
     refspec = f"{branch}:{pr.head_ref()}"
 
@@ -39,17 +47,14 @@ def rebase_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False) -> None:
                         "git pull --rebase`)", dry_run=dry_run)
 
 
-def rebase_ghstack_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False) -> None:
+def rebase_ghstack_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False, stable: bool = False) -> None:
     if subprocess.run([sys.executable, "-m", "ghstack", "--help"], capture_output=True).returncode != 0:
         subprocess.run([sys.executable, "-m", "pip", "install", "ghstack"])
     orig_ref = f"{re.sub(r'/head$', '/orig', pr.head_ref())}"
-    onto_branch = pr.default_branch()
+    onto_branch = "refs/remotes/origin/viable/strict" if stable else pr.default_branch()
 
     repo.fetch(orig_ref, orig_ref)
-    merge_base = repo._run_git("merge-base", "master", orig_ref)
-    print(merge_base)
-
-    repo._run_git("rebase", "--onto", "stable", merge_base.strip(), orig_ref)
+    repo._run_git("rebase", onto_branch, orig_ref)
     if dry_run:
         print("Don't know how to dry-run ghstack")
     else:
@@ -78,9 +83,9 @@ def rebase_ghstack_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False) -> N
                 pr_num = int(line.split("/")[-1])
                 if pr_num != pr.pr_num:
                     gh_post_comment(pr.org, pr.project, pr_num,
-                                    f"Rebased `{orig_ref}` onto `{onto_branch}` because #{pr.pr_num} was rebased, please pull locally " +
-                                    f"before adding more changes (for example, via `git checkout {orig_ref} && " +
-                                    "git pull --rebase`)", dry_run=dry_run)
+                                    f"Rebased `{orig_ref}` onto `{onto_branch}` because #{pr.pr_num} was rebased, "
+                                    "please pull locally before adding more changes (for example, via `git checkout "
+                                    f"{orig_ref} && git pull --rebase`)", dry_run=dry_run)
                 else:
                     gh_post_comment(pr.org, pr.project, pr_num,
                                     f"Successfully rebased `{orig_ref}` onto `{onto_branch}`, please pull locally " +
@@ -105,15 +110,14 @@ def main() -> None:
 
     try:
         if pr.is_ghstack_pr():
-            rebase_ghstack_onto(pr, repo, dry_run=args.dry_run)
+            rebase_ghstack_onto(pr, repo, dry_run=args.dry_run, stable=args.stable)
             return
-        rebase_onto(pr, repo, dry_run=args.dry_run)
+        rebase_onto(pr, repo, dry_run=args.dry_run, stable=args.stable)
     except Exception as e:
         msg = f"Rebase failed due to {e}"
         run_url = os.getenv("GH_RUN_URL")
         if run_url is not None:
             msg += f"\nRaised by {run_url}"
-        print(e)
         gh_post_comment(org, project, args.pr_num, msg, dry_run=args.dry_run)
 
 
