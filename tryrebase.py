@@ -42,7 +42,7 @@ def rebase_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False, stable: bool
 
 def rebase_ghstack_onto(pr: GitHubPR, repo: GitRepo, dry_run: bool = False, stable: bool = False) -> None:
     os.environ["OAUTH_TOKEN"] = os.environ["GITHUB_TOKEN"]
-    with open('~/.ghstackrc', 'w') as f:
+    with open('~/.ghstackrc', 'w+') as f:
         f.write('[ghstack]\n' +
                 "github_url=github.com\n" +
                 "github_username=clee2000\n" +
