@@ -2,9 +2,12 @@ name: Rebase PR
 
 on:
   repository_dispatch:
+  issue_comment:
+    types: [created]
 
 jobs:
   do_rebase:
+    if: contains(github.event.comment.body, '/rebase')
     runs-on: ubuntu-20.04
     steps:
       - name: Setup Python
