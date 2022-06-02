@@ -4,6 +4,12 @@ import expecttest
 import pytest
 
 
+@pytest.hookimpl(tryfirst=True)
+def pytest_runtest_makereport(item, call):
+    print(item.execution_count)
+    print(";alksdfja;lkdfj")
+
+
 def test1():
     assert random.randint(1, 2) == 2
 

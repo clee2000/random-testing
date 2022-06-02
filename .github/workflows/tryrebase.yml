@@ -32,5 +32,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT }}
           PR_NUM: ${{ github.event.client_payload.pr_num }}
           GH_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          BRANCH: ${{ github.event.client_payload.branch }}
         run: |
-          python3 tryrebase.py 14
+          set -ex
+          if [ -n "${BRANCH}" ]; then
+            python3 .github/scripts/tryrebase.py "${PR_NUM}" --branch "{BRANCH}"
+          else
+            python3 .github/scripts/tryrebase.py "${PR_NUM}"
+          fi
