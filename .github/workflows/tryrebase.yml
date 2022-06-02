@@ -32,7 +32,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT }}
           PR_NUM: ${{ github.event.client_payload.pr_num }}
           GH_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          BRANCH: ${{ github.event.client_payload.branch }}
+          BRANCH: clee2000/new-branch
         run: |
           set -ex
           if [ -n "${BRANCH}" ]; then
