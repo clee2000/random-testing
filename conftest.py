@@ -8,3 +8,4 @@ def pytest_runtest_makereport(item: pytest.Item, call):
     print(item)
     print("laksdjf;alkdsfj;lkads")
     print(item.execution_count)
+
