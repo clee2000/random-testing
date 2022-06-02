@@ -36,7 +36,7 @@ jobs:
         run: |
           set -ex
           if [ -n "${BRANCH}" ]; then
-            python3 .github/scripts/tryrebase.py 14 --branch "{BRANCH}"
+            python3 tryrebase.py 14 --branch "{BRANCH}"
           else
-            python3 .github/scripts/tryrebase.py 14
+            python3 tryrebase.py 14
           fi
