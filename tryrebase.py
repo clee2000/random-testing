@@ -14,6 +14,7 @@ def parse_args() -> Any:
     parser = ArgumentParser("Rebase PR into branch")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--branch", type=str)
+
     parser.add_argument("pr_num", type=int)
     return parser.parse_args()
 
