@@ -81,6 +81,7 @@ def parse_fuller_format(lines: Union[str, List[str]]) -> GitCommit:
         Author:     <author>
         AuthorDate: <author date>
         Commit:     <committer>
+
         CommitDate: <committer date>
 
         <title line>
