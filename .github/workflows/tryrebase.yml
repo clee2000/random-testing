@@ -4,6 +4,7 @@ on:
   repository_dispatch:
   issue_comment:
     types: [created]
+  push:
 
 jobs:
   do_rebase:
