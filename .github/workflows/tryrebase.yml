@@ -16,12 +16,6 @@ jobs:
           python-version: 3.8
           architecture: x64
 
-      - name: Checkout repo
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.PAT }}
-
       - name: Setup committer id
         continue-on-error: true
         run: |
