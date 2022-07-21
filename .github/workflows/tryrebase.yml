@@ -7,7 +7,6 @@ on:
 
 jobs:
   do_rebase:
-    if: contains(github.event.comment.body, '/rebase')
     runs-on: ubuntu-20.04
     steps:
       - name: Setup Python
@@ -23,20 +22,6 @@ jobs:
           token: ${{ secrets.PAT }}
 
       - name: Setup committer id
+        continue-on-error: true
         run: |
-          git config --global user.email "csl@fb.com"
-          git config --global user.name "Catherine Lee"
-
-      - name: Rebase
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-          PR_NUM: ${{ github.event.client_payload.pr_num }}
-          GH_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          BRANCH: clee2000/new-branch
-        run: |
-          set -ex
-          if [ -n "${BRANCH}" ]; then
-            python3 tryrebase.py 15 --branch "${BRANCH}"
-          else
-            python3 tryrebase.py 15
-          fi
+          zip a.zip 'dslkfajdslkfj'
