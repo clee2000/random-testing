@@ -1,0 +1,20 @@
+name: workflowrun
+
+on:
+  workflow_run:
+    workflows: [rebase]
+    types:
+      - completed
+
+jobs:
+  do-thin:
+    runs-on: ubuntu-20.04
+    name: adsfadsf
+
+    steps:
+      - name: Print
+        env:
+          HELLO: ${{ github.event }}
+        run: |
+          echo "asdfasdf"
+          echo $HELLO

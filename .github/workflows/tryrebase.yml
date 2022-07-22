@@ -1,4 +1,4 @@
-name: Rebase PR
+name: rebase
 
 on:
   repository_dispatch:
@@ -10,13 +10,7 @@ jobs:
   do_rebase:
     runs-on: ubuntu-20.04
     steps:
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-          architecture: x64
-
       - name: Setup committer id
         continue-on-error: true
         run: |
-          zip a.zip 'dslkfajdslkfj'
+          echo "asdfasdf"
