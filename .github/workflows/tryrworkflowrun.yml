@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Print
         env:
-          HELLO: ${{ toJSON(github.event) }}
+          HELLO: ${{ toJSON(github) }}
         run: |
           echo "asdfasdf"
           echo $HELLO
